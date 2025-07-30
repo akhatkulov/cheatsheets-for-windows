@@ -32,3 +32,11 @@ Agar biz **evil-winrm**dan foydalanmasdan GUI tarzda ulanishni istasak muhitni q
 ```
 reg add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /t REG_DWORD /v LocalAccountTokenFilterPolicy /d 1
 ```
+ushbu buyruq bajarilgach qayta ulanishimiz kerak.
+
+
+**evil-rm** bilan ulangach:
+![Photo](https://github.com/akhatkulov/cheatsheets-for-windows/blob/main/Windows%20Local%20Persistence/Tampering%20With%20Unprivileged%20Accounts/whoami_group.png)
+```
+whoami /group
+```
