@@ -16,6 +16,8 @@ Remote management group:
 ```
 net localgroup "Remote Management Users" __username__ /add
 ```
+Bu bizga masofadan ulanishga imkon yaratadi.
+
 
 ### Userga ulanish:
 ```
