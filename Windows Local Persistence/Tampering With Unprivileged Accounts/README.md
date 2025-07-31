@@ -203,3 +203,128 @@ Bu imtiyozlar **Windows xavfsizlik modeli**da juda muhim rol o‘ynaydi. Ulardan
 
 * `SAM` va `SYSTEM` fayllarini o‘qib, **xeshlar chiqarib olish** mumkin
 * Admin parolini **Pass-the-Hash** bilan chetlab o‘tish mumkin
+
+---
+
+## 🧠 RID Hijacking nima?
+
+Windows’da har bir foydalanuvchiga **SID** (Security Identifier) beriladi. SID ning oxirgi qismi — bu **RID** (Relative ID) bo‘lib, foydalanuvchini noyob qiladi:
+
+| Foydalanuvchi | SID Oxiri (RID) |
+| ------------- | --------------- |
+| Administrator | `...-500`       |
+| thmuser3      | `...-1010`      |
+
+Agar biz `thmuser3` foydalanuvchisiga `500` RID ni berib yuborsak, u **Administrator huquqlari bilan** tizimga kiradi.
+
+---
+
+## 🛠 1. SID va RID’larni ko‘rish
+
+```cmd
+wmic useraccount get name,sid
+```
+
+Siz bu yerda barcha foydalanuvchilarning SID’larini ko‘rasiz.
+
+---
+
+## 🧬 2. RID Hijacking bajarish (Regedit orqali)
+
+#### 🧨 Muhim: `HKLM\SAM` kalitini **oddiy foydalanuvchi yoki hatto administrator** ham o‘zgartira olmaydi. Faqat **NT AUTHORITY\SYSTEM** buni qila oladi.
+
+---
+
+### ✅ 3. `regedit`ni SYSTEM huquqida ishga tushirish
+
+#### Buyruq:
+
+```cmd
+C:\tools\pstools\PsExec64.exe -i -s regedit
+```
+
+> Bu `regedit` dasturini **SYSTEM** foydalanuvchisi nomidan ishga tushiradi.
+
+---
+
+### 🔎 4. `thmuser3` ni topish
+
+Regedit’da o‘ting:
+
+```
+HKLM\SAM\SAM\Domains\Account\Users\
+```
+
+Bu yerda har bir foydalanuvchi uchun bir kalit bor, lekin nomlar Raqamli HEX ko‘rinishida.
+
+thmuser3 ning RID-si `1010` = **0x3F2** bo‘ladi, ya'ni siz quyidagi kalitni izlaysiz:
+
+```
+000003F2
+```
+
+---
+
+### 🧬 5. `F` nomli qiymatni tahrirlash
+
+O‘ng tomonda `F` deb nomlangan binary value bor. Uni ikki marta bosing.
+
+* `F` qiymatidagi **0x30 offsetdagi 2 bayt** — bu foydalanuvchining **RID qiymati**
+* `0x3F2` (1010) ning little endian ko‘rinishi: `F2 03`
+* Buni **Administrator RID (500 = 0x01F4)** bilan almashtiring → `F4 01`
+
+> Eslatma: 0x30 offsetda bo‘lgan qiymatni **aniq joydan** o‘zgartirish kerak. HEX editor ko‘rinishida buni ehtiyotkorlik bilan bajaring.
+
+---
+
+### ✅ 6. Endi `thmuser3` foydalanuvchisi `Administrator` huquqida tizimga kira oladi
+
+---
+
+## 💻 7. RDP orqali tizimga kirish
+
+Sizga `thmuser3` foydalanuvchisi va paroli berilgan:
+
+```
+Username: thmuser3
+Password: Password321
+```
+
+Kirish uchun:
+
+### 🪟 Windows kompyuterdan:
+
+```bash
+mstsc.exe
+```
+
+Va IP manzilni kiriting. So‘ng:
+
+* Username: `thmuser3`
+* Password: `Password321`
+
+---
+
+### 🏁 8. Flag olish
+
+RDP sessiyaga kirganingizdan so‘ng, quyidagicha bajaring:
+
+```powershell
+C:\flags\flag3.exe
+```
+
+Bu sizga **flag3** ni beradi.
+
+---
+
+## ✅ Xulosa
+
+| Qadam | Harakat                                                          |
+| ----- | ---------------------------------------------------------------- |
+| 1     | `PsExec64` yordamida `regedit`ni SYSTEM huquqida ishga tushirish |
+| 2     | `0x3F2` (thmuser3) kalitini topish                               |
+| 3     | `F` qiymatidagi `0x30` offsetni `F4 01` bilan almashtirish       |
+| 4     | RDP orqali tizimga kirish                                        |
+| 5     | `flag3.exe` ni ishga tushirish                                   |
+
+---
