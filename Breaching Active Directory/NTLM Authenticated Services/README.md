@@ -25,4 +25,4 @@ Bu degani, ilova foydalanuvchini bevosita o‘zida autentifikatsiya qilmaydi, ba
 4. NetNTLM yordamida saytlar yoki ilovalar foydalanuvchini **bevosita** emas, **vositachi sifatida** AD orqali autentifikatsiya qiladi.
 5. Bu usul foydalanuvchi parolini ilova o‘zida saqlamaslikka yordam beradi — bu esa xavfsizlikni oshiradi.
 
-![NTLM]()
+![NTLM](https://raw.githubusercontent.com/akhatkulov/cheatsheets-for-windows/refs/heads/main/Breaching%20Active%20Directory/NTLM%20Authenticated%20Services/c9113ad0ff443dd0973736552e85aa69%20(1).png)
