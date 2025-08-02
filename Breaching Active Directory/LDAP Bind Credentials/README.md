@@ -17,4 +17,4 @@ Quyida LDAP orqali autentifikatsiya jarayoni ko‘rsatilgan:
 
 Agar to‘g‘ri serverga kirish imkoniyatiga ega bo‘lsak, masalan Gitlab serveri, unda ushbu AD hisob ma’lumotlarini tiklash ba’zida oddiygina konfiguratsiya fayllarini o‘qish orqali amalga oshiriladi. Bu hisob ma’lumotlari ko‘pincha konfiguratsiya fayllarida oddiy matn ko‘rinishida saqlanadi, chunki xavfsizlik modeli ularni yashirish o‘rniga server xavfsizligiga tayanadi.
 
-![LDAP]()
+![LDAP](https://github.com/akhatkulov/cheatsheets-for-windows/blob/main/Breaching%20Active%20Directory/LDAP%20Bind%20Credentials/d2f78ae2b44ef76453a80144dac86b4e.png?raw=true)
