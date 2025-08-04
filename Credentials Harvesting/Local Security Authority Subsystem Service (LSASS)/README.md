@@ -36,4 +36,4 @@ Bu hujum **MITRE ATT\&CK** ramkasida quyidagicha tasniflanadi:
 4. Ustiga **o‘ng tugmani** bosing va **“Create dump file”** ni tanlang.
 
 Bu bilan siz **LSASS jarayonining xotira nusxasini** (dump) olasiz. Keyinchalik bu dump faylni **mimikatz, pypykatz yoki procdump** kabi vositalar bilan analiz qilish mumkin.
-![]()
+![](https://github.com/akhatkulov/cheatsheets-for-windows/blob/main/Credentials%20Harvesting/Local%20Security%20Authority%20Subsystem%20Service%20(LSASS)/LSASS.png?raw=true)
