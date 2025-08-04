@@ -18,7 +18,7 @@ Credential Manager’ga GUI orqali kirish mumkin:
 **Control Panel → User Accounts → Credential Manager**
 Yoki **komanda satri orqali**. Bu vazifada GUI mavjud bo‘lmagan holatdagi komanda satridan foydalanamiz.
 
-![]()
+![](https://github.com/akhatkulov/cheatsheets-for-windows/blob/main/Credentials%20Harvesting/Windows%20Credential%20Manager/Windows%20Credential%20Manager.png?raw=true)
 
 ---
 
