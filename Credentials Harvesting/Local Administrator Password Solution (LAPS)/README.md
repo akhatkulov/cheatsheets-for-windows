@@ -19,4 +19,4 @@ Bu yangi usul Active Directory’da har bir kompyuter obyektiga ikkita yangi atr
 
 **LAPS**, kompyuterlarning mahalliy administrator parollarini avtomatik yangilab boradi va yuqoridagi atributlar qiymatini yangilash uchun `admpwd.dll` dan foydalanadi.
 
-![]()
+![](https://raw.githubusercontent.com/akhatkulov/cheatsheets-for-windows/refs/heads/main/Credentials%20Harvesting/Local%20Administrator%20Password%20Solution%20(LAPS)/Local%20Administrator%20Password%20Solution%20(LAPS).png)
