@@ -1,7 +1,4 @@
-Zo‘r 👍 Quyida **barchasi bir joyda jamlangan, GitHub README.md uchun tayyor TO‘LIQ cheatsheet** berilgan.
-Buni **to‘g‘ridan-to‘g‘ri nusxa ko‘chirib repo’ga qo‘yishingiz mumkin**.
 
----
 
 # 🧨 NTLM Theft via SMB — Full Cheatsheet
 
